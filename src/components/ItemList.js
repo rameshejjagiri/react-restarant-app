@@ -1,3 +1,5 @@
+// src/components/ItemList.js
+
 import React from 'react';
 
 const ItemList = ({ items, onAddToCart }) => {
@@ -16,3 +18,4 @@ const ItemList = ({ items, onAddToCart }) => {
 };
 
 export default ItemList;
+

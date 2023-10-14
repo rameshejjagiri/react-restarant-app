@@ -1,28 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import FilterBar from './components/FilterBar'; // Update this import
-import ItemList from './components/ItemList'; // Update this import
+import FilterBar from './components/FilterBar';
+import ItemList from './components/ItemList';
+import { categories, subcategories, items } from './models/data.js'; // Import the dummy data
 
 function App() {
-  const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('');
-  const [subcategories, setSubcategories] = useState([]);
-  const [selectedSubcategory, setSelectedSubcategory] = useState('');
-  const [items, setItems] = useState([]);
-
-  // Fetch categories, subcategories, and items from your API here.
+  const [selectedSubcategory, setSelectedSubcategory] = useState([]);
+  const [filteredItems, setFilteredItems] = useState([]);
 
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
-    // Fetch subcategories for the selected category.
+    // Filter subcategories based on the selected category
+    const subcategoriesForCategory = subcategories.filter((subcat) => subcat.categoryId === category);
+    setFilteredItems([]); // Clear filtered items
+    setSelectedSubcategory(''); // Clear selected subcategory
   };
 
   const handleSubcategoryChange = (subcategory) => {
     setSelectedSubcategory(subcategory);
-    // Fetch items for the selected subcategory.
-  };
-
-  const handleAddToCart = (item) => {
-    // Implement cart functionality here.
+    // Filter items based on the selected subcategory
+    const itemsForSubcategory = items.filter((item) => item.subcategoryId === subcategory);
+    setFilteredItems(itemsForSubcategory);
   };
 
   return (
@@ -34,7 +32,7 @@ function App() {
         subcategories={subcategories}
         onSubcategoryChange={handleSubcategoryChange}
       />
-      <ItemList items={items} onAddToCart={handleAddToCart} />
+      <ItemList items={items} />
     </div>
   );
 }
