@@ -1,17 +1,19 @@
-import React, { useState, useEffect } from 'react';
+// src/App.js
+
+import React, { useState } from 'react';
 import FilterBar from './components/FilterBar';
 import ItemList from './components/ItemList';
-import { categories, subcategories, items } from './models/data.js'; // Import the dummy data
+import Cart from './components/Cart.js'; // Update to all lowercase 'cart'
+import { categories, subcategories, items } from './models/Data';
 
 function App() {
   const [selectedCategory, setSelectedCategory] = useState('');
-  const [selectedSubcategory, setSelectedSubcategory] = useState([]);
+  const [selectedSubcategory, setSelectedSubcategory] = useState('');
   const [filteredItems, setFilteredItems] = useState([]);
+  const [cartItems, setCartItems] = useState([]); // Store cart items
 
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
-    // Filter subcategories based on the selected category
-    const subcategoriesForCategory = subcategories.filter((subcat) => subcat.categoryId === category);
     setFilteredItems([]); // Clear filtered items
     setSelectedSubcategory(''); // Clear selected subcategory
   };
@@ -23,6 +25,17 @@ function App() {
     setFilteredItems(itemsForSubcategory);
   };
 
+  const handleAddToCart = (item) => {
+    // Add item to the cart
+    setCartItems([...cartItems, item]);
+  };
+
+  const handleRemoveFromCart = (itemId) => {
+    // Remove item from the cart
+    const updatedCart = cartItems.filter((item) => item.id !== itemId);
+    setCartItems(updatedCart);
+  };
+
   return (
     <div className="App">
       <h1>Restaurant App</h1>
@@ -32,7 +45,8 @@ function App() {
         subcategories={subcategories}
         onSubcategoryChange={handleSubcategoryChange}
       />
-      <ItemList items={items} />
+      <ItemList items={items} onAddToCart={handleAddToCart} />
+      <Cart cartItems={cartItems} onRemoveFromCart={handleRemoveFromCart} />
     </div>
   );
 }
